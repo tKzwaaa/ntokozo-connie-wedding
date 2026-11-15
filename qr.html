@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding QR Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  body{margin:0;font-family:Georgia,serif;background:#faf6f1;color:#2b231d}
+  .wrap{max-width:520px;margin:0 auto;padding:28px 18px 48px}
+  h1{font-size:26px;margin:0 0 6px}
+  p.s{color:#6f6154;margin:0 0 20px}
+  label{display:block;font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:16px 0 6px;color:#6f6154}
+  input[type=url],input[type=text]{width:100%;padding:12px;font:inherit;font-size:16px;border:1px solid #cdbfae;border-radius:8px;background:#fff}
+  .row{display:flex;gap:10px;margin-top:18px}
+  button{flex:1;padding:13px;font:inherit;font-size:16px;border-radius:8px;border:0;cursor:pointer;background:#14110f;color:#c9a45c}
+  button.alt{background:#fff;color:#14110f;border:1px solid #14110f}
+  #card{margin-top:26px;background:#fff;border:1px solid #e2d6c6;border-radius:12px;padding:26px 20px;text-align:center}
+  #card .nm{font-size:30px;color:#8a6a4b;margin:0 0 4px;font-style:italic}
+  #card .cta{letter-spacing:.2em;text-transform:uppercase;font-size:13px;color:#6f6154;margin:0 0 18px}
+  #qr{display:inline-block;padding:14px;background:#fff}
+  #qr img,#qr canvas{display:block}
+  #card .hint{font-size:14px;color:#6f6154;margin:16px 0 0}
+  #msg{color:#a33;font-size:14px;margin-top:10px;min-height:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Wedding QR generator</h1>
+  <p class="s">Paste the final web address of your guest hub page. Test the result with your own phone before printing.</p>
+
+  <label for="url">Guest hub address</label>
+  <input id="url" type="url" placeholder="https://yourname.github.io/wedding-hub/" inputmode="url" autocomplete="off">
+
+  <label for="title">Heading on the card</label>
+  <input id="title" type="text" value="Ntokozo &amp; Connie">
+
+  <label for="cta">Line under the heading</label>
+  <input id="cta" type="text" value="Scan to join our day">
+
+  <div class="row">
+    <button id="make" type="button">Create QR</button>
+    <button id="dl" type="button" class="alt">Download PNG</button>
+  </div>
+  <div id="msg" role="alert"></div>
+
+  <div id="card">
+    <p class="nm" id="cnm">Ntokozo &amp; Connie</p>
+    <p class="cta" id="ccta">Scan to join our day</p>
+    <div id="qr"></div>
+    <p class="hint">Program · Photos · Memories</p>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let qr = null;
+
+function make(){
+  const url = $("url").value.trim();
+  $("msg").textContent = "";
+  if (!/^https?:\/\/.+\..+/.test(url)) { $("msg").textContent = "Enter the full address, starting with https://"; return false; }
+  $("cnm").textContent = $("title").value;
+  $("ccta").textContent = $("cta").value;
+  $("qr").innerHTML = "";
+  qr = new QRCode($("qr"), { text: url, width: 280, height: 280,
+    colorDark: "#14110f", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
+  return true;
+}
+
+function download(){
+  if (!make()) return;
+  setTimeout(() => {
+    const src = $("qr").querySelector("canvas");
+    if (!src) { $("msg").textContent = "Could not build the image. Try again."; return; }
+    const W = 1200, H = 1500, pad = 160, qrSize = W - pad*2;
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const g = c.getContext("2d");
+    g.fillStyle = "#ffffff"; g.fillRect(0,0,W,H);
+    g.textAlign = "center";
+    g.fillStyle = "#8a6a4b"; g.font = "italic 96px Georgia, serif";
+    g.fillText($("title").value, W/2, 170);
+    g.fillStyle = "#6f6154"; g.font = "36px Georgia, serif";
+    g.fillText($("cta").value.toUpperCase().split("").join(String.fromCharCode(8202)), W/2, 250);
+    g.imageSmoothingEnabled = false;
+    g.drawImage(src, pad, 330, qrSize, qrSize);
+    g.fillStyle = "#6f6154"; g.font = "34px Georgia, serif";
+    g.fillText("Program  ·  Photos  ·  Memories", W/2, 330 + qrSize + 90);
+    const a = document.createElement("a");
+    a.download = "wedding-qr.png"; a.href = c.toDataURL("image/png"); a.click();
+  }, 150);
+}
+
+$("make").addEventListener("click", make);
+$("dl").addEventListener("click", download);
+</script>
+</body>
+</html>
