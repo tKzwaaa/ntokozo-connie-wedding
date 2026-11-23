@@ -202,8 +202,8 @@ const CONFIG = {
       { time: "19:45–19:55", event: "Speech: Best Man" },
       { time: "19:55–20:05", event: "Optional sibling speeches" },
       { time: "20:05–20:15", event: "Recorded messages from family and friends" },
-      { time: "20:15–20:25", event: "Newlyweds' appreciation and acknowledgements" },
-      { time: "20:25–20:40", event: "Cake cutting" },
+      { time: "20:15–20:30", event: "Cake cutting" },
+      { time: "20:30–20:40", event: "Newlyweds' appreciation and acknowledgements", note: "Dessert may be served during this time" },
       { time: "20:40–21:00", event: "First dance and special dances" },
       { time: "21:00 onwards", event: "Open dance floor, entertainment and celebration" }
     ]}
@@ -214,20 +214,24 @@ const CONFIG = {
   // Menu, course by course. Add canapés and mains here once you have chosen them, for example:
   //   { course: "Plated Mains", items: [ { dish: "Dish name", desc: "Short description" } ] },
   menu: [
-    { course: "Canapés", label: "A selection of five", items: [
-      // { dish: "Canapé name" },
+    { course: "Canapés", label: "To start", items: [
+      { dish: "Bruschetta", desc: "Cream cheese, slow roasted tomatoes and basil" },
+      { dish: "Mini chicken Prego", desc: "Peri peri sauce" },
+      { dish: "Boa bun", desc: "Teriyaki pulled pork and slaw" },
+      { dish: "Beef sliders" },
+      { dish: "Lamb meatballs", desc: "Tzatziki" }
     ]},
-    { course: "Plated Mains", label: "One protein · One vegetarian / vegan", items: [
-      // { dish: "Protein dish name", desc: "Short description" },
-      // { dish: "Vegetarian / vegan dish name", desc: "Short description" },
+    { course: "Plated Mains", label: "Choose one", items: [
+      { dish: "Chicken roulade", desc: "Parmesan mashed potatoes and seasonal vegetables" },
+      { dish: "Vegetable stack", desc: "Grilled brinjal, peppers, roasted chickpeas, mozzarella and basil pesto cream sauce" }
     ]},
-    { course: "Dessert Display", label: "A selection of three", items: [
-      { dish: "Chocolate mousse" },
+    { course: "Dessert Display", label: "To finish", items: [
+      { dish: "Chocolate brownie" },
       { dish: "Lemon cheesecake" },
       { dish: "Traditional tiramisu" }
     ]}
   ],
-  menuNote: "Please tell us about any dietary needs when you RSVP."
+  menuNote: "Please tell us your choice of main and any dietary needs when you RSVP."
 };
 /* ================================================ */
 
